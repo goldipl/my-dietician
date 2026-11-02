@@ -1,5 +1,9 @@
 # MyDietician 🥗
 
+[![Deploy](https://github.com/goldipl/my-dietician/actions/workflows/nextjs.yml/badge.svg)](https://github.com/goldipl/my-dietician/actions/workflows/nextjs.yml)
+
+🔗 **Live demo: [goldipl.github.io/my-dietician](https://goldipl.github.io/my-dietician/)**
+
 **Twój personalny dietetyk online** – aplikacja webowa w Next.js, która na podstawie płci, wieku, wagi, wzrostu i wagi docelowej:
 
 - oblicza **BMI** (klasyfikacja WHO), prawidłowy zakres wagi i wagę idealną,
