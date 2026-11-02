@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { exercises } from "@/lib/data/exercises";
 import { CATEGORY_LABELS, fmt, GOAL_LABELS, LEVEL_LABELS, WEEKDAYS_SHORT } from "@/lib/labels";
-import type { Exercise, ExerciseCategory, FitnessLevel, WorkoutItem, WorkoutPlan } from "@/lib/types";
+import type { Exercise, ExerciseCategory, FitnessLevel, WorkoutItem } from "@/lib/types";
+import { generateWorkoutPlan } from "@/lib/workoutPlan";
 import { Icon } from "../Icon";
 import { useProfile } from "../ProfileProvider";
 import { Badge, Button, Card, CardTitle, EmptyProfile, Notice, PageHeader, Skeleton, Stat, cx } from "../ui";
@@ -38,36 +39,25 @@ export function WorkoutView() {
 }
 
 function MyPlan() {
-  const { hydrated, profile } = useProfile();
-  const [plan, setPlan] = useState<WorkoutPlan | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { hydrated, profile, nutrition } = useProfile();
   const [day, setDay] = useState(() => (new Date().getDay() + 6) % 7);
 
-  useEffect(() => {
-    if (!profile) return;
-    const controller = new AbortController();
-    setError(null);
-    fetch("/api/workout-plan", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ profile }),
-      signal: controller.signal,
-    })
-      .then(async (res) => {
-        if (!res.ok) throw new Error((await res.json()).error ?? "Błąd serwera");
-        return res.json() as Promise<{ plan: WorkoutPlan }>;
-      })
-      .then((data) => setPlan(data.plan))
-      .catch((e) => {
-        if (!controller.signal.aborted) setError(e instanceof Error ? e.message : "Nie udało się pobrać planu");
-      });
-    return () => controller.abort();
-  }, [profile]);
+  // Generated in the browser (same code as POST /api/workout-plan) so the app also works as a static site.
+  const plan = useMemo(
+    () =>
+      profile && nutrition
+        ? generateWorkoutPlan({
+            goal: nutrition.goal,
+            level: profile.fitnessLevel,
+            trainingDays: profile.trainingDays,
+            weight: profile.weight,
+          })
+        : null,
+    [profile, nutrition],
+  );
 
   if (!hydrated) return <Skeleton className="h-125" />;
-  if (!profile) return <EmptyProfile text="Podaj swoje dane i cel, a ułożymy dla Ciebie tygodniowy plan treningowy." />;
-  if (error) return <Notice tone="warning">{error}</Notice>;
-  if (!plan) return <Skeleton className="h-125" />;
+  if (!profile || !plan) return <EmptyProfile text="Podaj swoje dane i cel, a ułożymy dla Ciebie tygodniowy plan treningowy." />;
 
   const current = plan.days[day];
   const sessions = plan.days.filter((d) => !d.rest).length;

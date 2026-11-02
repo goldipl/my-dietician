@@ -30,6 +30,25 @@ npm start          # serwer produkcyjny
 npm run typecheck  # kontrola typów
 ```
 
+## Wdrożenie
+
+### GitHub Pages (wersja statyczna)
+
+Każdy push na `main` uruchamia workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), który buduje statyczny eksport i publikuje go na **https://goldipl.github.io/my-dietician/**.
+
+Jednorazowo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+
+GitHub Pages serwuje wyłącznie pliki statyczne, dlatego:
+- interfejs liczy jadłospis i plan treningowy w przeglądarce (te same funkcje co API),
+- katalog `src/app/api` jest pomijany w tym buildzie – REST API nie jest dostępne na Pages,
+- `scripts/flatten-rsc-segments.mjs` udostępnia pliki prefetch Next.js pod nazwami, o które pyta router.
+
+Lokalny podgląd eksportu: `GITHUB_PAGES=true PAGES_BASE_PATH=/my-dietician npm run build` (wymaga tymczasowego usunięcia `src/app/api`).
+
+### Serwer Node.js / Vercel (pełna wersja z API)
+
+`npm run build && npm start` – wszystkie strony oraz REST API.
+
 ## Struktura
 
 ```

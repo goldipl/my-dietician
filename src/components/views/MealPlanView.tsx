@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { DIET_LABELS, fmt, MEAL_LABELS, MEAL_TIMES, WEEKDAYS_SHORT } from "@/lib/labels";
-import { swapMeal } from "@/lib/mealPlan";
+import { generateMealPlan, swapMeal } from "@/lib/mealPlan";
 import type { MealPlan, PlannedMeal } from "@/lib/types";
 import { MacroBar } from "../charts/MacroBar";
 import { Icon } from "../Icon";
@@ -12,37 +12,25 @@ import { Badge, Button, Card, EmptyProfile, Notice, PageHeader, Skeleton, cx } f
 
 export function MealPlanView() {
   const { hydrated, profile, nutrition, mealPlan, setMealPlan } = useProfile();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [day, setDay] = useState(() => (new Date().getDay() + 6) % 7);
   const [tab, setTab] = useState<"menu" | "shopping">("menu");
 
-  const generate = useCallback(
-    async (seed?: number) => {
-      if (!profile) return;
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await fetch("/api/meal-plan", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ profile, seed }),
-        });
-        if (!res.ok) throw new Error((await res.json()).error ?? "Błąd serwera");
-        const data = (await res.json()) as { plan: MealPlan };
-        setMealPlan(data.plan);
-      } catch (e) {
-        setError(e instanceof Error ? e.message : "Nie udało się wygenerować planu");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [profile, setMealPlan],
-  );
+  // Generated in the browser (same code as POST /api/meal-plan) so the app also works as a static site.
+  const generate = useCallback(() => {
+    if (!profile || !nutrition) return;
+    setMealPlan(
+      generateMealPlan({
+        calories: nutrition.calories,
+        macros: nutrition.macros,
+        diet: profile.diet,
+        mealsPerDay: profile.mealsPerDay,
+      }),
+    );
+  }, [profile, nutrition, setMealPlan]);
 
   useEffect(() => {
-    if (hydrated && profile && !mealPlan && !loading && !error) void generate();
-  }, [hydrated, profile, mealPlan, loading, error, generate]);
+    if (hydrated && !mealPlan) generate();
+  }, [hydrated, mealPlan, generate]);
 
   if (!hydrated) return <Skeleton className="h-150" />;
   if (!profile || !nutrition) return <EmptyProfile text="Aby przygotować jadłospis, potrzebujemy Twoich danych i celu." />;
@@ -66,23 +54,12 @@ export function MealPlanView() {
             <Button variant="secondary" onClick={() => window.print()} disabled={!mealPlan}>
               <Icon name="printer" size={16} /> Drukuj
             </Button>
-            <Button onClick={() => generate()} disabled={loading}>
-              <Icon name="refresh" size={16} className={loading ? "animate-spin" : undefined} /> Nowy jadłospis
+            <Button onClick={generate}>
+              <Icon name="refresh" size={16} /> Nowy jadłospis
             </Button>
           </>
         }
       />
-
-      {error && (
-        <div className="mb-6">
-          <Notice tone="warning">
-            {error}{" "}
-            <button className="font-semibold underline" onClick={() => generate()}>
-              Spróbuj ponownie
-            </button>
-          </Notice>
-        </div>
-      )}
 
       {profile.diet === "vegan" && (
         <div className="no-print mb-6">
