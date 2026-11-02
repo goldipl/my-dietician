@@ -226,7 +226,7 @@ function Marquee() {
             {MARQUEE_ITEMS.map((item) => (
               <li key={item} className="flex items-center whitespace-nowrap px-6 font-display text-lg font-bold">
                 {item}
-                <span className="ml-12 opacity-50">✦</span>
+                <span className="ml-12 size-2 rounded-full bg-current opacity-50" aria-hidden="true" />
               </li>
             ))}
           </ul>

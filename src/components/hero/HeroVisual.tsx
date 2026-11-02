@@ -220,11 +220,10 @@ function SaladBowl() {
       <path d="M60 200 A140 30 0 0 0 340 200 A140 140 0 0 1 60 200 Z" fill="url(#bowl-body)" />
       <path d="M60 200 A140 30 0 0 0 340 200" fill="none" stroke="#6ee7b7" strokeWidth="4" />
       <path d="M92 244 A118 118 0 0 0 150 318" fill="none" stroke="#fff" strokeOpacity="0.3" strokeWidth="7" strokeLinecap="round" />
-      <path d="M200 266 l6 14 14 6 -14 6 -6 14 -6 -14 -14 -6 14 -6 z" fill="#fff" opacity="0.35" />
 
-      {/* sparkles */}
-      <path d="M335 105 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 z" fill="#facc15" />
-      <path d="M58 120 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 z" fill="#34d399" />
+      {/* accent dots */}
+      <circle cx="335" cy="115" r="7" fill="#facc15" />
+      <circle cx="58" cy="127" r="5" fill="#34d399" />
     </svg>
   );
 }
