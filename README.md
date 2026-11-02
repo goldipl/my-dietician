@@ -34,7 +34,7 @@ npm run typecheck  # kontrola typów
 
 ### GitHub Pages (wersja statyczna)
 
-Każdy push na `main` uruchamia workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), który buduje statyczny eksport i publikuje go na **https://goldipl.github.io/my-dietician/**.
+Każdy push na `main` uruchamia workflow [`.github/workflows/nextjs.yml`](.github/workflows/nextjs.yml), który buduje statyczny eksport i publikuje go na **https://goldipl.github.io/my-dietician/**.
 
 Jednorazowo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
