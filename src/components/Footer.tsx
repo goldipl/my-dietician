@@ -51,10 +51,10 @@ function AuthorBadge() {
       target="_blank"
       rel="noopener"
       aria-label="mgodlewskidev.pl – strona autora (otwiera się w nowej karcie)"
-      className="group inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-[#332f4c] to-[#25223a] py-1 pl-1 pr-2.5 sm:gap-2.5 sm:rounded-xl sm:py-1.5 sm:pl-1.5 sm:pr-3.5 shadow-sm ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#6c4dff]/25"
+      className="group inline-flex items-center gap-1.5 rounded-md bg-linear-to-br from-[#332f4c] to-[#25223a] py-0.5 pl-0.5 pr-2 shadow-sm ring-1 ring-white/10 transition hover:-translate-y-px hover:shadow-md hover:shadow-[#6c4dff]/25"
     >
-      <span className="grid size-6 place-items-center rounded-[7px] sm:size-8 sm:rounded-[10px] bg-linear-to-b from-[#7d63ff] to-[#5638dc] shadow-[inset_0_1px_0_rgb(255_255_255/0.28),0_2px_8px_rgb(86_56_220/0.45)] ring-1 ring-white/15">
-        <svg viewBox="0 0 32 32" className="size-5 sm:size-7" aria-hidden="true">
+      <span className="grid size-[18px] place-items-center rounded-[5px] bg-linear-to-b from-[#7d63ff] to-[#5638dc] shadow-[inset_0_1px_0_rgb(255_255_255/0.28),0_1px_4px_rgb(86_56_220/0.45)] ring-1 ring-white/15">
+        <svg viewBox="0 0 32 32" className="size-4" aria-hidden="true">
           <path
             d="M5 23V14.5a4 4 0 0 1 8 0V23M13 14.5a4 4 0 0 1 8 0V23"
             fill="none"
@@ -66,11 +66,11 @@ function AuthorBadge() {
           <circle cx="26.6" cy="23" r="2.7" fill="#c6f25a" />
         </svg>
       </span>
-      <span className="whitespace-nowrap font-sans text-xs leading-none sm:text-[15px] tracking-[-0.03em]">
+      <span className="whitespace-nowrap font-sans text-[11px] leading-none tracking-[-0.02em]">
         <span className="font-extrabold text-[#efeef7]">mgodlewski</span>
         <span className="font-extrabold text-[#8b6dff]">dev</span>
-        <span className="mx-[2px] inline-block size-1 rounded-full bg-[#8b6dff] sm:mx-[3px] sm:size-[5px]" />
-        <span className="font-mono text-[10.5px] font-medium sm:text-[13px] tracking-normal text-[#a09eb3]">pl</span>
+        <span className="mx-[2px] inline-block size-[3px] rounded-full bg-[#8b6dff]" />
+        <span className="font-mono text-[9.5px] font-medium tracking-normal text-[#a09eb3]">pl</span>
       </span>
     </a>
   );
