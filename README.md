@@ -4,82 +4,84 @@
 
 🔗 **Live demo: [goldipl.github.io/my-dietician](https://goldipl.github.io/my-dietician/)**
 
-**Twój personalny dietetyk online** – aplikacja webowa w Next.js, która na podstawie płci, wieku, wagi, wzrostu i wagi docelowej:
+**Your personal online dietitian** – a Next.js web app that takes your sex, age, weight, height and target weight, and then:
 
-- oblicza **BMI** (klasyfikacja WHO), prawidłowy zakres wagi i wagę idealną,
-- wylicza **zapotrzebowanie kaloryczne** (BMR wzorem Mifflina-St Jeora, TDEE) oraz bezpieczny deficyt/nadwyżkę,
-- dobiera **makroskładniki**, błonnik i ilość wody,
-- układa **7-dniowy plan posiłków** z porcjami przeliczonymi pod Twoje kalorie (z listą zakupów i wymianą dań),
-- udostępnia **bazę 45 przepisów** z kalorycznością i makro,
-- przygotowuje **tygodniowy plan ćwiczeń** (26 ćwiczeń: siła, cardio, HIIT, mobilność) pod cel i poziom,
-- prowadzi **dziennik wagi** z wykresem postępów.
+- calculates your **BMI** (WHO classification), healthy weight range and ideal weight,
+- works out your **calorie needs** (BMR via Mifflin-St Jeor, TDEE) and a safe deficit or surplus,
+- sets daily **macros**, fiber and water intake,
+- builds a **7-day meal plan** with portions scaled to your calories (shopping list included, swap any dish in one click),
+- offers a **library of 45 recipes** with calories and macros,
+- prepares a **weekly workout plan** (26 exercises: strength, cardio, HIIT, mobility) matched to your goal and level,
+- keeps a **weight log** with a progress chart.
 
-## Technologie
+The user interface is in Polish.
 
-| Warstwa | Technologia |
+## Tech stack
+
+| Layer | Technology |
 |---|---|
 | Framework | Next.js 16 (App Router, Turbopack), React 19 |
-| Język | TypeScript (strict) |
-| Style | Tailwind CSS 4 (tokeny kolorów w CSS, tryb jasny i ciemny) |
-| Walidacja | Zod 4 (wspólny schemat dla formularza i API) |
-| Dane użytkownika | `localStorage` – bez rejestracji, nic nie opuszcza przeglądarki |
+| Language | TypeScript (strict) |
+| Styling | Tailwind CSS 4 (CSS color tokens, light and dark mode) |
+| Validation | Zod 4 (one schema shared by the form and the API) |
+| User data | `localStorage` – no sign-up, nothing leaves the browser |
 
-## Uruchomienie
+## Getting started
 
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm run build      # build produkcyjny
-npm start          # serwer produkcyjny
-npm run typecheck  # kontrola typów
+npm run build      # production build
+npm start          # production server
+npm run typecheck  # type check
 ```
 
-## Wdrożenie
+## Deployment
 
-### GitHub Pages (wersja statyczna)
+### GitHub Pages (static version)
 
-Każdy push na `main` uruchamia workflow [`.github/workflows/nextjs.yml`](.github/workflows/nextjs.yml), który buduje statyczny eksport i publikuje go na **https://goldipl.github.io/my-dietician/**.
+Every push to `main` runs the [`.github/workflows/nextjs.yml`](.github/workflows/nextjs.yml) workflow, which builds a static export and publishes it to **https://goldipl.github.io/my-dietician/**.
 
-Jednorazowo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+One-time setup: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
-GitHub Pages serwuje wyłącznie pliki statyczne, dlatego:
-- interfejs liczy jadłospis i plan treningowy w przeglądarce (te same funkcje co API),
-- katalog `src/app/api` jest pomijany w tym buildzie – REST API nie jest dostępne na Pages,
-- `scripts/flatten-rsc-segments.mjs` udostępnia pliki prefetch Next.js pod nazwami, o które pyta router.
+GitHub Pages only serves static files, so:
+- the UI generates the meal plan and workout plan in the browser (the same functions the API uses),
+- `src/app/api` is left out of this build – the REST API is not available on Pages,
+- `scripts/flatten-rsc-segments.mjs` exposes Next.js prefetch payloads under the file names the client router requests.
 
-Lokalny podgląd eksportu: `GITHUB_PAGES=true PAGES_BASE_PATH=/my-dietician npm run build` (wymaga tymczasowego usunięcia `src/app/api`).
+Local preview of the export: `GITHUB_PAGES=true PAGES_BASE_PATH=/my-dietician npm run build` (temporarily remove `src/app/api` first).
 
-### Serwer Node.js / Vercel (pełna wersja z API)
+### Node.js server / Vercel (full version with the API)
 
-`npm run build && npm start` – wszystkie strony oraz REST API.
+`npm run build && npm start` – all pages plus the REST API.
 
-## Struktura
+## Project structure
 
 ```
 src/
 ├── app/
-│   ├── page.tsx              # strona główna + szybki kalkulator BMI
-│   ├── kalkulator/           # formularz profilu + wyniki na żywo
-│   ├── panel/                # dashboard dnia
-│   ├── plan-posilkow/        # jadłospis 7 dni, lista zakupów, druk
-│   ├── przepisy/[id]/        # baza przepisów (SSG) + skalowanie porcji
-│   ├── cwiczenia/            # plan treningowy + biblioteka ćwiczeń
-│   ├── postepy/              # dziennik wagi z wykresem
-│   └── api/                  # REST API (patrz niżej)
-├── components/               # UI, wykresy (SVG), widoki stron
+│   ├── page.tsx              # landing page + quick BMI calculator
+│   ├── kalkulator/           # profile form + live results
+│   ├── panel/                # daily dashboard
+│   ├── plan-posilkow/        # 7-day meal plan, shopping list, print
+│   ├── przepisy/[id]/        # recipe library (SSG) + portion scaling
+│   ├── cwiczenia/            # workout plan + exercise library
+│   ├── postepy/              # weight log with chart
+│   └── api/                  # REST API (see below)
+├── components/               # UI, charts (SVG), page views
 └── lib/
-    ├── nutrition.ts          # BMI, BMR, TDEE, kalorie, makro, reguły bezpieczeństwa
-    ├── mealPlan.ts           # generator jadłospisu (deterministyczny seed)
-    ├── workoutPlan.ts        # generator planu treningowego (MET)
-    ├── schema.ts             # schemat Zod profilu
-    └── data/                 # przepisy i ćwiczenia
+    ├── nutrition.ts          # BMI, BMR, TDEE, calories, macros, safety rules
+    ├── mealPlan.ts           # meal plan generator (deterministic seed)
+    ├── workoutPlan.ts        # workout plan generator (MET-based)
+    ├── schema.ts             # Zod profile schema
+    └── data/                 # recipes and exercises
 ```
 
 ## REST API
 
-Wszystkie endpointy przyjmują i zwracają JSON. Błędy walidacji zwracają `422` z polem `details`.
+All endpoints accept and return JSON. Validation errors return `422` with a `details` field.
 
-Obiekt **profilu** (`profile`):
+The **profile** object (`profile`):
 
 ```json
 {
@@ -89,7 +91,7 @@ Obiekt **profilu** (`profile`):
   "height": 168,              // cm, 130–230
   "targetWeight": 64,         // kg
   "activity": "light",        // sedentary | light | moderate | active | very_active
-  "pace": 0.5,                // kg/tydz., 0.25–1
+  "pace": 0.5,                // kg/week, 0.25–1
   "diet": "standard",         // standard | vegetarian | vegan | gluten_free
   "mealsPerDay": 4,           // 3 | 4 | 5
   "fitnessLevel": "beginner", // beginner | intermediate | advanced
@@ -97,18 +99,18 @@ Obiekt **profilu** (`profile`):
 }
 ```
 
-| Metoda | Ścieżka | Opis |
+| Method | Path | Description |
 |---|---|---|
-| `GET` | `/api/health` | Status usługi |
-| `GET` / `POST` | `/api/bmi?weight=80&height=180` lub `{ weight, height }` | BMI, kategoria, zakres prawidłowej wagi |
-| `POST` | `/api/nutrition` `{ profile }` | BMR, TDEE, kalorie, makro, woda, termin osiągnięcia celu, ostrzeżenia |
-| `POST` | `/api/meal-plan` `{ profile, seed? }` | Jadłospis na 7 dni + lista zakupów (ten sam `seed` = ten sam plan) |
-| `POST` | `/api/workout-plan` `{ profile }` | Tygodniowy plan treningowy z szacowanym spalaniem |
-| `GET` | `/api/recipes?meal=lunch&diet=vegan&q=tofu&maxKcal=600` | Lista przepisów z filtrami |
-| `GET` | `/api/recipes/:id` | Szczegóły przepisu |
-| `GET` | `/api/exercises?category=strength&level=beginner` | Lista ćwiczeń |
+| `GET` | `/api/health` | Service status |
+| `GET` / `POST` | `/api/bmi?weight=80&height=180` or `{ weight, height }` | BMI, category, healthy weight range |
+| `POST` | `/api/nutrition` `{ profile }` | BMR, TDEE, calories, macros, water, goal date, warnings |
+| `POST` | `/api/meal-plan` `{ profile, seed? }` | 7-day meal plan + shopping list (same `seed` = same plan) |
+| `POST` | `/api/workout-plan` `{ profile }` | Weekly workout plan with estimated calories burned |
+| `GET` | `/api/recipes?meal=lunch&diet=vegan&q=tofu&maxKcal=600` | Filtered recipe list |
+| `GET` | `/api/recipes/:id` | Recipe details |
+| `GET` | `/api/exercises?category=strength&level=beginner` | Exercise list |
 
-Przykład:
+Example:
 
 ```bash
 curl -X POST http://localhost:3000/api/nutrition \
@@ -116,20 +118,20 @@ curl -X POST http://localhost:3000/api/nutrition \
   -d '{"profile":{"sex":"female","age":30,"weight":72,"height":168,"targetWeight":64,"activity":"light","pace":0.5,"diet":"standard","mealsPerDay":4,"fitnessLevel":"beginner","trainingDays":3}}'
 ```
 
-## Jak liczymy
+## How it calculates
 
-- **BMR** – Mifflin-St Jeor: `10·waga + 6,25·wzrost − 5·wiek + (5 ♂ | −161 ♀)`
-- **TDEE** – BMR × współczynnik aktywności (1,2–1,9)
-- **Deficyt/nadwyżka** – `tempo × 7700 kcal / 7` dziennie
-- **Białko** – 1,6 g/kg (redukcja), 1,3 g/kg (utrzymanie), 1,8 g/kg (masa); przy nadwadze liczone od wagi przy BMI 25
-- **Tłuszcze** – 27–28% energii, **węglowodany** – reszta
-- **Spalanie w treningu** – `MET × waga × czas` (Compendium of Physical Activities)
+- **BMR** – Mifflin-St Jeor: `10·weight + 6.25·height − 5·age + (5 ♂ | −161 ♀)`
+- **TDEE** – BMR × activity factor (1.2–1.9)
+- **Deficit/surplus** – `pace × 7700 kcal / 7` per day
+- **Protein** – 1.6 g/kg (weight loss), 1.3 g/kg (maintenance), 1.8 g/kg (muscle gain); for overweight users it is based on the weight at BMI 25
+- **Fat** – 27–28% of energy, **carbs** – the rest
+- **Calories burned in workouts** – `MET × weight × time` (Compendium of Physical Activities)
 
-### Reguły bezpieczeństwa
+### Safety rules
 
-- kalorie nigdy poniżej 1200 kcal (kobiety) / 1500 kcal (mężczyźni),
-- tempo redukcji maks. ~1% masy ciała tygodniowo, przyrostu maks. 0,5 kg/tydz.,
-- brak planu redukcji poniżej dolnej granicy prawidłowej wagi (BMI 18,5) – przy niedowadze plan przechodzi w utrzymanie,
-- ostrzeżenia dla osób niepełnoletnich oraz przy BMI < 17 lub ≥ 35.
+- calories never go below 1200 kcal (women) / 1500 kcal (men),
+- weight loss is capped at ~1% of body weight per week, weight gain at 0.5 kg/week,
+- no weight-loss plan below the lower healthy-weight limit (BMI 18.5) – for underweight users the plan switches to maintenance,
+- warnings for users under 18 and for BMI < 17 or ≥ 35.
 
-> ⚠️ MyDietician ma charakter edukacyjny i nie zastępuje porady lekarza ani dietetyka klinicznego.
+> ⚠️ MyDietician is for educational purposes only and does not replace advice from a doctor or a clinical dietitian.
