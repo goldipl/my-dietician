@@ -16,6 +16,71 @@
 
 The user interface is in Polish.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/home.png" alt="Landing page" /><br />
+      <b>Landing page</b><br />
+      <sub>Hero section with a quick BMI calculator further down the page</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/calculator.png" alt="BMI and calorie calculator" /><br />
+      <b>BMI &amp; calorie calculator</b><br />
+      <sub>Profile form with live BMI, healthy weight range and daily calorie target</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/dashboard.png" alt="Daily dashboard" /><br />
+      <b>Daily dashboard</b><br />
+      <sub>Today's meals, workout, macros and BMI – current vs. target</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/meal-plan.png" alt="7-day meal plan" /><br />
+      <b>7-day meal plan</b><br />
+      <sub>Portions scaled to your calories, one-click meal swap, shopping list and print</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/recipes.png" alt="Recipe library" /><br />
+      <b>Recipe library</b><br />
+      <sub>45 recipes – search and filter by meal, diet and calories</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/recipe.png" alt="Recipe details" /><br />
+      <b>Recipe details</b><br />
+      <sub>Adjustable servings with macros, ingredients and step-by-step instructions</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/workouts.png" alt="Workout plan" /><br />
+      <b>Workout plan</b><br />
+      <sub>Weekly plan matched to your goal and level, with estimated calories burned</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/progress.png" alt="Progress tracking" /><br />
+      <b>Progress tracking</b><br />
+      <sub>Weight log with a chart, target line and healthy weight zone</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/home-dark.png" alt="Landing page in dark mode" /><br />
+      <b>Dark mode – landing page</b><br />
+      <sub>Light and dark themes, following the system setting or toggled manually</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/dashboard-dark.png" alt="Dashboard in dark mode" /><br />
+      <b>Dark mode – dashboard</b><br />
+      <sub>Every view supports both themes</sub>
+    </td>
+  </tr>
+</table>
+
 ## Tech stack
 
 | Layer | Technology |
